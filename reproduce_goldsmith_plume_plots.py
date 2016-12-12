@@ -5,6 +5,7 @@ and how to compute f_c correctly (under benchmark-like conditions).
 """
 
 from __future__ import division
+import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,8 +15,10 @@ import pyradex
 from correction_factor.correction_factor_2 import correction_factor_given_radex_table
 
 # Default values come from Goldsmith/Bergin/Lis '97, esp. the c18o abundance
-def make_goldsmith_figure_9(save=True, column=1e16, abundance=1.7e-7):
+def make_goldsmith_figure_9(save=True, column=1e16, abundance=1.7e-7, print_timing=False):
     """ Generates my version of Fig. 9 from Goldsmith+'97 """
+
+    start = time.time()
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
     R = pyradex.Radex(species='c18o', abundance=abundance, temperature=20, column=column)
@@ -62,12 +65,17 @@ def make_goldsmith_figure_9(save=True, column=1e16, abundance=1.7e-7):
 
     plt.show()
 
+    end = time.time()
+    if print_timing:
+        print end-start
+
     return fig
 
 
-def make_goldsmith_figure_10(save=True):
+def make_goldsmith_figure_10(save=True, print_timing=False):
     """ Generates my version of Fig. 10 from Goldsmith+'97 """
 
+    start = time.time()
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
@@ -118,6 +126,10 @@ def make_goldsmith_figure_10(save=True):
         fig.savefig("goldsmith97_fig_10_reproduction.pdf")
 
     plt.show()
+
+    end = time.time()
+    if print_timing:
+        print end-start
 
     return fig
 
