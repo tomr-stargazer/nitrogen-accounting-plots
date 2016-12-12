@@ -10,10 +10,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyradex
 
+# This import will have to change if I refactor correction_factor much.
+from correction_factor.correction_factor_2 import correction_factor_given_radex_table
 
-def make_goldsmith_figure_9():
+# Default values come from Goldsmith/Bergin/Lis '97, esp. the c18o abundance
+def make_goldsmith_figure_9(save=True, column=1e16, abundance=1.7e-7):
+    """ Generates my version of Fig. 9 from Goldsmith+'97 """
 
-    R = pyradex.Radex(species='c18o', abundance=1e-8, temperature=20, column=1e14)
+    # Here we have to specify 2 of 3: abundance, temperature, density.
+    R = pyradex.Radex(species='c18o', abundance=abundance, temperature=20, column=column)
 
     fig = plt.figure()
 
@@ -43,7 +48,7 @@ def make_goldsmith_figure_9():
     fontdict = {'family':'serif'}
 
     ax.set_ylabel("EXCITATION TEMPERATURE/K", fontdict=fontdict)
-    ax.set_xlabel("LOG (MOLECULAR HYDROGEN DENSITY/CM$^{-3}$", fontdict=fontdict)
+    ax.set_xlabel("LOG (MOLECULAR HYDROGEN DENSITY/CM$^{-3}$)", fontdict=fontdict)
 
     ax.text(1.5, 20, "C$^{18}$O", fontsize=18, family='serif')
     ax.text(2.35, 15, "$J = 1 - 0$", fontsize=16, family='serif', color='b')
@@ -52,7 +57,8 @@ def make_goldsmith_figure_9():
 
     ax.minorticks_on()
 
-    fig.savefig("goldsmith97_fig_9_reproduction.pdf")
+    if save:
+        fig.savefig("goldsmith97_fig_9_reproduction.pdf")
 
     plt.show()
 
