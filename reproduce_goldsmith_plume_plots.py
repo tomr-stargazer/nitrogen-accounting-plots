@@ -76,6 +76,10 @@ def make_goldsmith_figure_10(save=True, print_timing=False):
     """ Generates my version of Fig. 10 from Goldsmith+'97 """
 
     start = time.time()
+
+    # Here we have to specify 2 of 3: abundance, temperature, density.
+    R = pyradex.Radex(species='c18o', abundance=1.7e-7, column=1e14, temperature=50)
+
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
@@ -90,8 +94,7 @@ def make_goldsmith_figure_10(save=True, print_timing=False):
 
     for j, temp in enumerate(temperature_list):
 
-        # Here we have to specify 2 of 3: abundance, temperature, density.
-        R = pyradex.Radex(species='c18o', abundance=1.7e-7, column=1e14, temperature=temp)
+        R.temperature = temp
 
         for i, rho in enumerate(density_array):
 
