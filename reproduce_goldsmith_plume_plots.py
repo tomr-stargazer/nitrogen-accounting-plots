@@ -255,12 +255,6 @@ def make_plume_figure_3(save=True, print_timing=False, abundance=5e-7, n_points=
     ax.set_ylabel("Correction Factor", fontdict=fontdict)
     ax.set_xlabel("Temp (K)", fontdict=fontdict)
 
-    # ax.text(4.5, 2.8, "C$^{18}$O", fontsize=18, family='serif')
-    # ax.text(6, 2.8, r"$T_k = 50\ \rm{K}$", fontsize=16, family='serif', color='r')
-    # ax.text(6, 2.2, r"$T_k = 30\ \rm{K}$", fontsize=16, family='serif', color='g')
-    # ax.text(6, 1.55, r"$T_k = 10\ \rm{K}$", fontsize=16, family='serif', color='b')
-    # ax.text(2.5, 2.5, "$J=1-0$ & $J=2-1$ OBSERVED", fontsize=14, family='serif')
-
     ax.minorticks_on()
 
     if save:
