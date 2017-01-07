@@ -226,7 +226,7 @@ def h13cn_fc_vs_density_B(save=True, print_timing=False, abundance=1e-8):
     start = time.time()
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=100, column=1e16)
+    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=100, column=1e16, escapeProbGeom='lvg')
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -379,7 +379,7 @@ def h13cn_fc_vs_temperature_B(save=True, print_timing=False, abundance=1e-8, n_p
     # J_lower_list = [x-1 for x in J_upper_list]
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=5e16, temperature=50, escapeProbGeom='lvg')
+    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=1e16, temperature=50, escapeProbGeom='lvg')
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -404,8 +404,6 @@ def h13cn_fc_vs_temperature_B(save=True, print_timing=False, abundance=1e-8, n_p
 
             # use the correction_factor code here!
             f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
-            # They only use the lowest 18 rotational levels, 
-            # even though the plot's appearance changes when 40 are included.
 
             f_c_array_list[j][i] = f_c
             
