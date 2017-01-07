@@ -84,5 +84,76 @@ def crude_attempt_at_matching():
 
     print f_c_dict_2
 
-
     return 
+
+def debugging_function():
+    abundance=1e-8
+    n_points=20
+
+    # Here we have to specify 2 of 3: abundance, temperature, density.
+    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=1e16, temperature=50, escapeProbGeom='lvg')
+
+    density_list = [1e6]
+    temperature_array = np.linspace(10, 400, n_points)
+
+    f_c_array_n6 = np.zeros_like(temperature_array)
+
+    f_c_array_list = [f_c_array_n6]
+
+    list_of_tables = []
+
+    for j, density in enumerate(density_list):
+
+        R.density = density
+
+        for i, temp in enumerate(temperature_array):
+
+            R.temperature = temp
+
+            new_T = R(temperature=temp)
+            list_of_tables.append(new_T)
+
+            # use the correction_factor code here!
+            f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
+
+            f_c_array_list[j][i] = f_c
+            
+    return list_of_tables, f_c_array_list[0]  
+
+
+def debugging_function_2():
+    abundance=1e-8
+
+    # Here we have to specify 2 of 3: abundance, temperature, density.
+    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=100, column=1e16, escapeProbGeom='lvg')
+
+    density_array = np.logspace(4, 8.5, 100)
+    temperature_list = [50, 100, 200]
+
+    f_c_array_50K = np.zeros_like(density_array)
+    f_c_array_100K = np.zeros_like(density_array)
+    f_c_array_200K = np.zeros_like(density_array)
+
+    f_c_array_list = [f_c_array_50K, f_c_array_100K, f_c_array_200K]
+
+    list_of_tables = []
+
+    for j, temp in enumerate(temperature_list):
+
+        R.temperature = temp
+
+        for i, rho in enumerate(density_array):
+
+            new_T = R(collider_densities={'H2':rho})
+            list_of_tables.append(new_T)
+
+            # use the correction_factor code here!
+            f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
+
+            f_c_array_list[j][i] = f_c
+
+            if min(new_T['Tex']) < 0:
+                print "negative Tex encountered"
+                print "conditions: T={0}, n={1}".format(temp, rho)
+            
+    return list_of_tables, f_c_array_list
