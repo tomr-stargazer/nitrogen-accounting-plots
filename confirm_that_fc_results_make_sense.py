@@ -144,16 +144,23 @@ def debugging_function_2():
 
         for i, rho in enumerate(density_array):
 
-            new_T = R(collider_densities={'H2':rho})
+            new_T = R(collider_densities={'H2':rho}, temperature=temp)
             list_of_tables.append(new_T)
 
             # use the correction_factor code here!
             f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
 
-            f_c_array_list[j][i] = f_c
-
             if min(new_T['Tex']) < 0:
                 print "negative Tex encountered"
                 print "conditions: T={0}, n={1}".format(temp, rho)
+                f_c_array_list[j][i] = np.nan
+            elif np.sum(new_T['lowerlevelpop']) < 0.99:
+                print "unphysical population statistics encountered"
+                print "conditions: T={0}, n={1}".format(temp, rho)
+                f_c_array_list[j][i] = np.nan
+            else:
+                f_c_array_list[j][i] = f_c
+
+
             
     return list_of_tables, f_c_array_list
