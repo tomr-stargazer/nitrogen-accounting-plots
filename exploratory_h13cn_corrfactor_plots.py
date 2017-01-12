@@ -6,6 +6,7 @@ goldsmith/plume plots as a model.
 
 from __future__ import division
 import time
+import pdb
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -286,7 +287,7 @@ def h13cn_fc_vs_density_B(save=True, print_timing=False, abundance=1e-8):
     return fig
 
 
-def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_points=20):
+def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_points=20, column=5e16, deltav=1):
     """ 
     Generates a clone of Fig. 3 from Plume+'12 for h13cn 
 
@@ -303,7 +304,7 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_p
     # J_lower_list = [x-1 for x in J_upper_list]
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=5e16, temperature=50, escapeProbGeom='lvg')
+    # R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=column, temperature=10, escapeProbGeom='lvg', deltav=deltav)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -317,20 +318,49 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_p
 
     f_c_array_list = [f_c_array_n5, f_c_array_n6, f_c_array_n7]
 
-    for j, density in enumerate(density_list):
+    # for j, density in enumerate(density_list):
 
-        R.density = density
+    #     R.density = density
 
-        for i, temp in enumerate(temperature_array):
+    for i, temp in enumerate(temperature_array):
+        # R.temperature = temp
 
-            new_T = R(temperature=temp)
+        for j, density in enumerate(density_list):
+
+            # R.density = density
+            # R.temperature = temp
+            # R.column = column
+
+            try:
+                del R
+            except:
+                pass
+            R = pyradex.Radex(species='h13cn@xpol', column=column, density=density, temperature=temp, escapeProbGeom='sphere')
+            R.run_radex(reuse_last=False, reload_molfile=True)
+
+            new_T = R.get_table()
 
             # use the correction_factor code here!
             f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
             # They only use the lowest 18 rotational levels, 
             # even though the plot's appearance changes when 40 are included.
 
-            f_c_array_list[j][i] = f_c
+            if np.sum(new_T['lowerlevelpop']) < 0.99:
+                print "unphysical population statistics encountered"
+                print "conditions: T={0}, n={1}".format(temp, density)
+                print "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav)
+                f_c_array_list[j][i] = np.nan
+                print(r"run %debug and explore the variable `new_T` here.")
+                pdb.set_trace()
+            elif min(new_T['Tex']) < 0:
+                print "negative Tex encountered"
+                print "conditions: T={0}, n={1}".format(temp, density)
+                print "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav)
+                # raise ValueError("intentionally erroring")
+                f_c_array_list[j][i] = f_c
+                pdb.set_trace()
+            else:
+                f_c_array_list[j][i] = f_c
             
     ax.plot(temperature_array, f_c_array_n7, 'b-', lw=1.5, label=r'$n = 10^7\ \rm{cm}^{-3}$')
     ax.plot(temperature_array, f_c_array_n6, 'g--', lw=1.5, label=r'$n = 10^6\ \rm{cm}^{-3}$')
@@ -339,7 +369,7 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_p
     ax.legend(frameon=False, loc='upper center', fontsize=18)
 
     ax.set_xlim(0, 400)
-    # ax.set_ylim(1.6, 2)
+    ax.set_ylim(1.3, 2)
     # ax.set_xticks([0,100,200,300,400])
     # ax.set_yticks([1.6,1.7,1.8,1.9,2])
 
