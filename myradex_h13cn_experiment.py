@@ -61,13 +61,15 @@ for T in temp_array:
     loop_params = params.copy()
     loop_params['tkin'] = T
 
-    energies,f_occupations,data_transitions,cooling_rate = \
-        wrapper.run_one_params(**loop_params)
+    od = h13cn_myradex_interface.myradex_h13cn(
+        kinetic_temperature=T, 
+        column_density=loop_params['ncol_x_cgs'], 
+        collider_density=loop_params['h2_density_cgs'])
 
-    ax2.plot(energies, f_occupations, marker='o')
+    ax2.plot(od['energies'], od['f_occupations'], marker='o')
 
     print "fcorr at T={0}:".format(T)
-    print correction_factor_given_myradex_output(f_occupations, observed_lines)
+    print correction_factor_given_myradex_output(od['f_occupations'], observed_lines)
 
 
 ax2.set_xlabel('E (K)')
