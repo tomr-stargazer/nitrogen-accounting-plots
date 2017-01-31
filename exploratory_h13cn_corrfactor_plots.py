@@ -12,14 +12,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyradex
 
+import h13cn_myradex_interface
+
 # This import will have to change if I refactor correction_factor much.
 from correction_factor.correction_factor_2 import correction_factor_given_radex_table
 
 h13cn_J_upper_list = [1, 3, 4, 6, 7, 8, 9, 10]
 h13cn_J_lower_list = [x-1 for x in h13cn_J_upper_list]
 
-# Abundance value inspired by Brinch 2009 - general ballpark
-def h13cn_Tex_vs_density_A(save=True, column=1e16, abundance=1e-8, print_timing=False):
+def h13cn_Tex_vs_density_A(save=True, column=1e16, print_timing=False):
     """ 
     Generates a clone of Fig. 9 from Goldsmith+'97 for h13cn.
 
@@ -30,7 +31,7 @@ def h13cn_Tex_vs_density_A(save=True, column=1e16, abundance=1e-8, print_timing=
     start = time.time()
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=20, column=column)
+    R = pyradex.Radex(species='h13cn@xpol', density=1e1, temperature=20, column=column)
 
     fig = plt.figure()
 
@@ -81,8 +82,68 @@ def h13cn_Tex_vs_density_A(save=True, column=1e16, abundance=1e-8, print_timing=
 
     return fig
 
-# Abundance value inspired by Brinch 2009 - general ballpark
-def h13cn_Tex_vs_density_B(save=True, column=1e16, abundance=1e-8, print_timing=False):
+
+def h13cn_Tex_vs_density_A_myradex(save=True, column=1e16, print_timing=False):
+    """ 
+    Generates a clone of Fig. 9 from Goldsmith+'97 for h13cn.
+
+    Parameters chosen for similarity with Goldsmith '97.
+
+    """
+
+    start = time.time()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    density_array = np.logspace(1, 6.5, 100)
+
+    Tex_array_1_0 = np.zeros_like(density_array)
+    Tex_array_3_2 = np.zeros_like(density_array)
+    Tex_array_4_3 = np.zeros_like(density_array)
+
+    for i, density in enumerate(density_array):
+
+        od = h13cn_myradex_interface.myradex_h13cn(kinetic_temperature=20, column_density=column, collider_density=density)
+        new_T = od['table']
+
+        Tex_array_1_0[i] = new_T[0]['Tex']
+        Tex_array_3_2[i] = new_T[2]['Tex']
+        Tex_array_4_3[i] = new_T[3]['Tex']
+
+    ax.plot(np.log10(density_array), Tex_array_1_0, '-', lw=1.5, color='b')
+    ax.plot(np.log10(density_array), Tex_array_3_2, '--', lw=1.5, color='r')
+    ax.plot(np.log10(density_array), Tex_array_4_3, '-.', lw=2, color='purple')
+
+    ax.set_ylim(0,25)
+    ax.set_xlim(1,6.5)
+
+    fontdict = {'family':'serif'}
+
+    ax.set_ylabel("EXCITATION TEMPERATURE/K", fontdict=fontdict)
+    ax.set_xlabel("LOG (MOLECULAR HYDROGEN DENSITY/CM$^{-3}$)", fontdict=fontdict)
+
+    ax.text(1.5, 20, "H$^{13}$CN, T = 20 K", fontsize=18, family='serif')
+    ax.text(5, 22, "$J = 1 - 0$", fontsize=16, family='serif', color='b')
+    ax.text(3.6, 7, "$J = 4 - 3$", fontsize=16, family='serif', color='purple')
+    ax.text(5.6, 4, "$J = 3 - 2$", fontsize=16, family='serif', color='r')
+
+    ax.set_title("version A.myradex")
+    ax.minorticks_on()
+
+    if save:
+        fig.savefig("h13cn_Tex_vs_density_A_myradex.pdf")
+
+    plt.show()
+
+    end = time.time()
+    if print_timing:
+        print end-start
+
+    return fig
+
+
+def h13cn_Tex_vs_density_B(save=True, column=1e16, print_timing=False):
     """ 
     Generates a clone of Fig. 9 from Goldsmith+'97 for h13cn.
 
@@ -93,7 +154,7 @@ def h13cn_Tex_vs_density_B(save=True, column=1e16, abundance=1e-8, print_timing=
     start = time.time()
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=100, column=column)
+    R = pyradex.Radex(species='h13cn@xpol', density=1e4, temperature=100, column=column)
 
     fig = plt.figure()
 
@@ -145,7 +206,7 @@ def h13cn_Tex_vs_density_B(save=True, column=1e16, abundance=1e-8, print_timing=
     return fig
 
 
-def h13cn_fc_vs_density_A(save=True, print_timing=False, abundance=1e-8):
+def h13cn_fc_vs_density_A(save=True, print_timing=False):
     """ 
     Generates a clone of Fig. 10 from Goldsmith+'97 for h13cn 
 
@@ -153,11 +214,10 @@ def h13cn_fc_vs_density_A(save=True, print_timing=False, abundance=1e-8):
 
     """
 
-
     start = time.time()
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=20, column=1e16)
+    R = pyradex.Radex(species='h13cn@xpol', density=1e1, temperature=20, column=1e16)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -216,7 +276,7 @@ def h13cn_fc_vs_density_A(save=True, print_timing=False, abundance=1e-8):
 
     return fig
 
-def h13cn_fc_vs_density_B(save=True, print_timing=False, abundance=1e-8):
+def h13cn_fc_vs_density_B(save=True, print_timing=False):
     """ 
     Generates a clone of Fig. 10 from Goldsmith+'97 for h13cn 
 
@@ -226,8 +286,8 @@ def h13cn_fc_vs_density_B(save=True, print_timing=False, abundance=1e-8):
 
     start = time.time()
 
-    # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, temperature=100, column=1e16, escapeProbGeom='lvg')
+    # Here we have to specify 2 of 3: temperature, density.
+    R = pyradex.Radex(species='h13cn@xpol', density=1e4, temperature=100, column=1e16, escapeProbGeom='lvg')
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -287,7 +347,7 @@ def h13cn_fc_vs_density_B(save=True, print_timing=False, abundance=1e-8):
     return fig
 
 
-def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_points=20, column=5e16, deltav=1):
+def h13cn_fc_vs_temperature_A(save=True, print_timing=False, n_points=20, column=5e16, deltav=1):
     """ 
     Generates a clone of Fig. 3 from Plume+'12 for h13cn 
 
@@ -392,7 +452,7 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, abundance=1e-8, n_p
     return fig    
 
 
-def h13cn_fc_vs_temperature_B(save=True, print_timing=False, abundance=1e-8, n_points=20):
+def h13cn_fc_vs_temperature_B(save=True, print_timing=False, n_points=20):
     """ 
     Generates a clone of Fig. 3 from Plume+'12 for h13cn 
 
@@ -409,7 +469,7 @@ def h13cn_fc_vs_temperature_B(save=True, print_timing=False, abundance=1e-8, n_p
     # J_lower_list = [x-1 for x in J_upper_list]
 
     # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', abundance=abundance, column=1e16, temperature=50, escapeProbGeom='lvg')
+    R = pyradex.Radex(species='h13cn@xpol', density=1e6, column=1e16, temperature=50, escapeProbGeom='lvg')
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
