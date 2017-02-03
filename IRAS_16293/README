@@ -1,0 +1,26 @@
+This directory holds the code and IPython notebooks involved in compiling the H13CN abundance towards IRAS 16293.
+
+For the H13CN column density measurement, I envision the following scripts:
+
+emission_lines_h13cn_hc15n.py
+# this loads the Herschel emission line data from elsewhere and prepares it for plotting. Includes a function which makes a multi-panel plot.
+
+optical_depths_h13cn.py
+# this uses a numerical root-finding approach (hopefully defined elsewhere, like in `tau_isotopologue`) to compute and return the tau values of as many h13cn transitions as possible.
+
+alma_source_size_h13cn.py
+# This will load and display the ALMA science verification (SV) data of IRAS 16293 in Band 9, showing the H13CN 8-7 line.
+# I intend for the source size to have been estimated by-hand, in CASA using a polygon select tool...
+# https://casaguides.nrao.edu/index.php?title=IRAS16293_Band9_-_Imaging_for_CASA_4.2#Create_a_velocity_cube_for_H13CN_.28J.3D8-7.29
+
+sum_observed_columns_h13cn.py
+# This will take the integrated intensities from each observed line and properly compute the "N_upper" column densities of the associated upper states. This will take optical depths and beamsize corrections into account.
+
+estimate_correction_factor_h13cn.py
+# Interface with pyradex/myradex, given estimated physical conditions, to produce a correction factor estimate given the lines observed
+
+final_column_h13cn.py
+# Sum up the N_uppers and multiply by correction factor to get the final answer.
+
+I have also created an IPython notebook, `IRAS 16293 new.ipynb`, which displays the results of each step in the above process.
+
