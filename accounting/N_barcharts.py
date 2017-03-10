@@ -75,15 +75,43 @@ def make_coldens_range_dict(table):
 
 def make_errorbar_figure(table):
 
-    molecules_in_order = ['HCN', 'NH3',]
-
-    h2_column_density = 3.1e23
-
     fig = plt.figure()
-    ax = add_subplot(111)
+    ax = fig.add_subplot(111)
 
-    ax.set_ylabel("Abundance")
+    molecule_dict = make_coldens_range_dict(table)
+
+    max_value_per_molecule_dict = {x: np.max(y) for x, y in molecule_dict.items()} 
+    items = max_value_per_molecule_dict.items()
+    molecules_unsorted = np.array([molecule for molecule, value in items])
+    values_unsorted = np.array([value for molecule, value in items])
+    sorted_indices = np.argsort(values_unsorted)[::-1]
+
+    molecules_sorted_by_max_value = molecules_unsorted[sorted_indices]
+
+    for i, molecule in enumerate(molecules_sorted_by_max_value):
+
+        values = molecule_dict[molecule]
+
+        if len(values) == 1:
+
+            ax.plot(i, values[0], 'ko', ms=3)
+
+        else:
+
+            min_val = min(values)
+            max_val = max(values)
+            val_range = max_val-min_val
+
+            ax.errorbar(i, (max_val+min_val)/2, yerr=val_range/2, fmt='None', ecolor='k', capsize=5)
+    ax.set_xticks(np.arange(len(molecules_sorted_by_max_value)))
+    ax.set_xticklabels(molecules_sorted_by_max_value, rotation=90)
+
+    ax.set_ylabel("Column density")
 
     return fig
 
+
+# included just for memory...
+# contains_N = np.array(['N' in item for item in table['Molecule']])
+# nitrogen_molecules_table = table[contains_N]
 
