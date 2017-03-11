@@ -53,7 +53,7 @@ def latex_molecule_name(molecule_name):
     return latex_name
 
 
-def make_coldens_range_dict(table):
+def coldens_range_dict_from_table(table):
     """ result: (main isotopologue -> tuple of coldens values) dict """
 
     ratio_12C_13C = 69
@@ -114,10 +114,14 @@ def make_errorbar_figure(molecule_dict, ylabel="Column density (cm$^{-2}$)"):
     return fig
 
 
-def make_abundance_fraction_dict_from_coldens_range_dict(molecule_dict):
+def abundance_fraction_dict_from_coldens_range_dict(molecule_dict):
+    """ 
+    This 'naive' approach is not quite right for the range of HCN values. 
+
+    """
 
     # first we need to FIND the total amount of nitrogen, in coldens units...
-    total_N_column = np.sum([np.max(y) for y in molecule_dict.values()])
+    total_N_column = np.sum([np.median(y) for y in molecule_dict.values()])
 
     # then we need to divide all the values in the range dict by that number 
     # (non-destructively) and build a new dict of abundance fraction ranges.
