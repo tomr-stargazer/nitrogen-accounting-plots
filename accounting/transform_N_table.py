@@ -29,8 +29,8 @@ def transform_table(table, species=('hcn', 'nh3')):
         new_table.remove_rows(hcn_row_indices)
         # a. make the "real" value we want to show
         # make it
-        ratio_14n_15n = 388 # from Wilson '99 local ISM
-        real_hcn_N_tot = np.sum(table['N_tot'][table['Molecule'] == 'HC^15N']) * ratio_14n_15n
+        ratio_12C_13C = 69 # from Wilson '99 local ISM
+        real_hcn_N_tot = np.sum(table['N_tot'][table['Molecule'] == 'H^13CN,nu_2 = 1']) * ratio_12C_13C
         real_hcn_row = ('HCN', 0, 0, real_hcn_N_tot, 0, 0)
         # add it as a row
         new_table.add_row(real_hcn_row)
@@ -44,6 +44,7 @@ def transform_table(table, species=('hcn', 'nh3')):
         new_table.remove_rows(nh3_row_indices)
         # a. make the "real" value we want to show
         # make it
+        ratio_14n_15n = 388
         real_nh3_N_tot = np.sum(table['N_tot'][table['Molecule'] == '^15NH_3']) * ratio_14n_15n
         real_nh3_row = ('NH_3', 0, 0, real_nh3_N_tot, 0, 0)
         # add it as a row
