@@ -6,11 +6,27 @@ https://casaguides.nrao.edu/index.php?title=IRAS16293_Band9_-_Imaging_for_CASA_4
 """
 
 from __future__ import division
+import os.path
 
 import numpy as np
 import matplotlib.pyplot as plt
+import astropy.io.fits
 
 from config import alma_data_path
 
 def show_alma_h13cn_image():
+
+    mom0_filename = 'IRAS16293_Band9.fixed.H13CN_8_7.image.pbcor.subim.mom0.fits'
+
+    data, header = astropy.io.fits.getdata(os.path.join(alma_data_path, mom0_filename), header=True)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.imshow(data.squeeze(), origin='lower', vmin=0)
+    plt.show()
+
+    return fig
+
+
 
