@@ -677,13 +677,11 @@ def h13cn_fc_vs_temperature_myradex(save=True, print_timing=False, n_points=20):
     # Plume '12 claims to use an abundance of 2e-7 (i.e. one C18O for every 500 x 10^4 H2 atoms)
     # but I find that 5e-7 matches the appearance much more closely.
 
+    column=1e10
     start = time.time()
 
     # J_upper_list = [2,3,5,7,8,9,11,15]
     # J_lower_list = [x-1 for x in J_upper_list]
-
-    # Here we have to specify 2 of 3: abundance, temperature, density.
-    R = pyradex.Radex(species='h13cn@xpol', density=1e6, column=1e10, temperature=50, escapeProbGeom='lvg')
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -700,14 +698,14 @@ def h13cn_fc_vs_temperature_myradex(save=True, print_timing=False, n_points=20):
 
     for j, density in enumerate(density_list):
 
-        R.density = density
-
         for i, temp in enumerate(temperature_array):
 
-            new_T = R(temperature=temp)
+            od = h13cn_myradex_interface.myradex_h13cn(kinetic_temperature=temp, 
+                column_density=column, collider_density=density)
+            new_T = od['table']
 
             # use the correction_factor code here!
-            f_c = correction_factor_given_radex_table(new_T, h13cn_J_lower_list)
+            f_c = correction_factor_given_myradex_output(od['f_occupations'], h13cn_J_lower_list)
 
             f_c_array_list[j][i] = f_c
             
@@ -731,7 +729,7 @@ def h13cn_fc_vs_temperature_myradex(save=True, print_timing=False, n_points=20):
     ax.minorticks_on()
 
     if save:
-        fig.savefig("h13cn_fc_vs_temperature_B.pdf")
+        fig.savefig("h13cn_fc_vs_temperature_myradex.pdf")
 
     plt.show()
 
