@@ -134,6 +134,28 @@ def abundance_fraction_dict_from_coldens_range_dict(molecule_dict):
     return abundance_fraction_dict
 
 
+def abundance_fraction_dict_v2(molecule_dict):
+    """
+    This does a "poor-man's" error propagation to get the uncertainties under control.
+
+    """
+
+    naive_total_N_column = np.sum([np.median(y) for y in molecule_dict.values()])
+
+    abundance_fraction_dict = {}
+
+    for molecule in molecule_dict.keys():
+
+        # This approach ensures that we never get an abundance > 1.
+        N_tot_others = naive_total_N_column - np.median(molecule_dict[molecule])
+
+        abundance_list = [value / (N_tot_others+value) for value in molecule_dict[molecule]]
+
+        abundance_fraction_dict[molecule] = abundance_list
+
+    return abundance_fraction_dict
+
+
 # included just for memory...
 # contains_N = np.array(['N' in item for item in table['Molecule']])
 # nitrogen_molecules_table = table[contains_N]
