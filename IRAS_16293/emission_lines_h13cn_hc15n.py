@@ -6,8 +6,9 @@ this loads the Herschel emission line data from elsewhere and prepares it for pl
 from __future__ import division
 
 # Let's LOAD the data from somewhere... then make it plottable!
+from config import hifi_data_path
 
-data_path = None
+# in principle we'd like to plot the spectra and whatnot. Do I have the patience for that right now? Probably not.
 
 def load_HIFI_spectral_data():
     """ Loads the HIFI spectral data. """
