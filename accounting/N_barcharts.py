@@ -46,10 +46,12 @@ def main_species(molecule_name):
 
     return name_sans_15N
 
+
 def latex_molecule_name(molecule_name):
     """ Makes the string latex-friendly. """
     latex_name = r"$\rm{"+molecule_name+"}$"
     return latex_name
+
 
 def make_coldens_range_dict(table):
     """ result: (main isotopologue -> tuple of coldens values) dict """
@@ -76,13 +78,10 @@ def make_coldens_range_dict(table):
     return molecule_dict
 
 
-
-def make_errorbar_figure(table):
+def make_errorbar_figure(molecule_dict, ylabel="Column density (cm$^{-2}$)"):
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
-
-    molecule_dict = make_coldens_range_dict(table)
 
     max_value_per_molecule_dict = {x: np.max(y) for x, y in molecule_dict.items()}
     items = max_value_per_molecule_dict.items()
@@ -110,9 +109,25 @@ def make_errorbar_figure(table):
     ax.set_xticks(np.arange(len(molecules_sorted_by_max_value)))
     ax.set_xticklabels([latex_molecule_name(mol) for mol in molecules_sorted_by_max_value], rotation=90)
 
-    ax.set_ylabel("Column density (cm$^{-2}$)")
+    ax.set_ylabel(ylabel)
 
     return fig
+
+
+def make_abundance_fraction_dict_from_coldens_range_dict(molecule_dict):
+
+    # first we need to FIND the total amount of nitrogen, in coldens units...
+    total_N_column = np.sum([np.max(y) for y in molecule_dict.values()])
+
+    # then we need to divide all the values in the range dict by that number 
+    # (non-destructively) and build a new dict of abundance fraction ranges.
+    abundance_fraction_dict = {}
+
+    for molecule in molecule_dict.keys():
+        coldens_list = molecule_dict[molecule]
+        abundance_fraction_dict[molecule] = [coldens/total_N_column for coldens in coldens_list]
+
+    return abundance_fraction_dict
 
 
 # included just for memory...
