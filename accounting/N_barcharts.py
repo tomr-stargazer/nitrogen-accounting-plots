@@ -46,6 +46,10 @@ def main_species(molecule_name):
 
     return name_sans_15N
 
+def latex_molecule_name(molecule_name):
+    """ Makes the string latex-friendly. """
+    latex_name = r"$\rm{"+molecule_name+"}$"
+    return latex_name
 
 def make_coldens_range_dict(table):
     """ result: (main isotopologue -> tuple of coldens values) dict """
@@ -80,7 +84,7 @@ def make_errorbar_figure(table):
 
     molecule_dict = make_coldens_range_dict(table)
 
-    max_value_per_molecule_dict = {x: np.max(y) for x, y in molecule_dict.items()} 
+    max_value_per_molecule_dict = {x: np.max(y) for x, y in molecule_dict.items()}
     items = max_value_per_molecule_dict.items()
     molecules_unsorted = np.array([molecule for molecule, value in items])
     values_unsorted = np.array([value for molecule, value in items])
@@ -104,9 +108,9 @@ def make_errorbar_figure(table):
 
             ax.errorbar(i, (max_val+min_val)/2, yerr=val_range/2, fmt='None', ecolor='k', capsize=5)
     ax.set_xticks(np.arange(len(molecules_sorted_by_max_value)))
-    ax.set_xticklabels(molecules_sorted_by_max_value, rotation=90)
+    ax.set_xticklabels([latex_molecule_name(mol) for mol in molecules_sorted_by_max_value], rotation=90)
 
-    ax.set_ylabel("Column density")
+    ax.set_ylabel("Column density (cm$^{-2}$)")
 
     return fig
 
