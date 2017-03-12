@@ -56,12 +56,28 @@ def latex_molecule_name(molecule_name):
 def coldens_range_dict_from_table(table):
     """ result: (main isotopologue -> tuple of coldens values) dict """
 
+    # I need an intermediate table.
+    # table with rows for each component -> table with rows for each species.
+    adjusted_table = table.copy()
+    adjusted_table.remove_columns(("theta_s", "T_rot", "v_lsr", "Deltav"))
+    molecule_list = np.array(list(set(table['Molecule'])))
+    molecule_count = np.array([np.sum(table['Molecule']==molecule) for molecule in molecule_list])
+    duplicate_species = molecule_list[molecule_count>1]
+
+    for molecule in duplicate_species:
+        # get the 
+        combined_N_tot = np.sum(table['N_tot'][table['Molecule'] == molecule])
+        # do an operation wherein we remove the old ones
+        indices = adjusted_table['Molecule'] == molecule
+        adjusted_table.remove_rows(indices)
+        adjusted_table.add_row((molecule, combined_N_tot))
+
     ratio_12C_13C = 69
     ratio_14N_15N = 388
 
     molecule_dict = {}
 
-    for row in table:
+    for row in adjusted_table:
         # is this an isotopologue or a main species?
         if '^13C' in row['Molecule']:
             N_tot_main = row['N_tot'] * ratio_12C_13C
@@ -156,7 +172,39 @@ def abundance_fraction_dict_v2(molecule_dict):
     return abundance_fraction_dict
 
 
-# included just for memory...
-# contains_N = np.array(['N' in item for item in table['Molecule']])
-# nitrogen_molecules_table = table[contains_N]
+def make_charts_for_OrionKL_HotCore():
+
+    table = astropy.table.Table.read("apj493753t4_ascii_copy_hotcore.txt", format='ascii.basic', delimiter='\t', guess=False, data_start=3)    
+    contains_N = np.array(['N' in item for item in table['Molecule']])
+    nitrogen_molecules_table = table[contains_N]
+    molecule_dict = coldens_range_dict_from_table(nitrogen_molecules_table)
+    del molecule_dict['NH_2D']
+    del molecule_dict['DCN']
+    fraction_dict_v2 = abundance_fraction_dict_v2(molecule_dict)
+
+    figure_list = []
+    figure_list.append(make_errorbar_figure(molecule_dict))
+    plt.semilogy()
+    plt.savefig("column_density_plot.png", bbox_inches='tight')
+
+    figure_list.append(make_errorbar_figure(fraction_dict_v2, ylabel="Nitrogen fraction"))
+    plt.semilogy()
+    plt.savefig("nitrogen_fraction_plot.png", bbox_inches='tight')
+
+    hydrogen_column_density = 3.1e23
+    X_abundance_dict = {x: np.array(y)/hydrogen_column_density for x, y in molecule_dict.items()}
+
+    figure_list.append(make_errorbar_figure(X_abundance_dict, ylabel="Molecular abundance X"))
+    plt.semilogy()
+    plt.savefig("abundance_plot.png", bbox_inches='tight')
+
+    Si_to_H_ratio = 3.16e-05
+    N_to_Si_conversion_constant = 1/2 * 1/Si_to_H_ratio
+    N_Si_ratio_dict = {x: y*N_to_Si_conversion_constant for x, y in X_abundance_dict.items()}
+
+    figure_list.append(make_errorbar_figure(N_Si_ratio_dict, ylabel="N/Si ratio for each molecule"))
+    plt.semilogy()
+    plt.savefig("N_Si_plot.png", bbox_inches='tight')
+
+    return figure_list
 
