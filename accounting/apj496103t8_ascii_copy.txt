@@ -1,0 +1,22 @@
+Table 8
+LTE Parameters for the Sgr B2(N) Full-band Model (Hot Absorption Components, T_ex > 40 K)
+
+Molecule	theta_s	T_rot	N_tot	Deltav	v_lsr	
+(")	(K)	(cm^-2)	(km s^-1)	(km s^-1)	
+H_2CO	3.5	200	1.5e16	10	58	
+HCO^+	5	55	1.2e14	6	73	
+HNCO	5.0	150	6.0e14	8	55	
+HNCO	5.0	40	3.0e14	5	73	
+HCN	3.5	190	2.5e15	13	58	
+HCN	3.5	50	9.0e14	6	73	
+H^13CN	5.0	140	2.0e14	9	55	
+HC^15N	5.0	140	2.0e14	9	55	
+DCN	5.0	140	2.0e13	9	55	
+HNC	3.5	150	4.0e14	9	55	
+HNC	3.5	50	1.0e14	6	55	
+HN^13C	5.0	140	1.0e14	9	55	
+H_2S	3.5	350	1.5e16	9	55	
+H_2S	ext.	100	4.0e13	9	64	
+HS	5.0	80	5.0e14	9	55	
+HS	5.0	80	4.0e14	9	55	
+CS	5.0	150	3.0e15	10	58	
