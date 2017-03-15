@@ -5,6 +5,9 @@ We're gonna try and make a bar-chart oriented dealio here.
 
 
 from __future__ import division
+
+import pdb
+
 import numpy as np
 import matplotlib.pyplot as plt
 import astropy.table
@@ -94,9 +97,13 @@ def coldens_range_dict_from_table(table):
     return molecule_dict
 
 
-def make_errorbar_figure(molecule_dict, ylabel="Column density (cm$^{-2}$)"):
+def make_errorbar_figure(molecule_dict, 
+    ylabel="Column density (cm$^{-2}$)", 
+    figsize=(5,5),
+    dpi=None,
+    colors=['k']):
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111)
 
     max_value_per_molecule_dict = {x: np.max(y) for x, y in molecule_dict.items()}
@@ -109,11 +116,13 @@ def make_errorbar_figure(molecule_dict, ylabel="Column density (cm$^{-2}$)"):
 
     for i, molecule in enumerate(molecules_sorted_by_max_value):
 
+        color = colors[i%len(colors)]
+
         values = molecule_dict[molecule]
 
         if len(values) == 1:
 
-            ax.plot(i, values[0], 'ko', ms=3)
+            ax.plot(i, values[0], 'o', color=color, ms=4)
 
         else:
 
@@ -121,7 +130,7 @@ def make_errorbar_figure(molecule_dict, ylabel="Column density (cm$^{-2}$)"):
             max_val = max(values)
             val_range = max_val-min_val
 
-            ax.errorbar(i, (max_val+min_val)/2, yerr=val_range/2, fmt='None', ecolor='k', capsize=5)
+            ax.errorbar(i, (max_val+min_val)/2, yerr=val_range/2, fmt='None', ecolor=color, capsize=4, elinewidth=2, capthick=2)
     ax.set_xticks(np.arange(len(molecules_sorted_by_max_value)))
     ax.set_xticklabels([latex_molecule_name(mol) for mol in molecules_sorted_by_max_value], rotation=90)
 
@@ -191,6 +200,21 @@ def make_charts_for_OrionKL_HotCore():
     plt.semilogy()
     plt.savefig("nitrogen_fraction_plot.png", bbox_inches='tight')
 
+    figure_list.append(
+        make_errorbar_figure(
+            fraction_dict_v2, 
+            ylabel="Nitrogen fraction", figsize=(2.5, 2.5), dpi=400,
+            colors= ['tab:red', 'tab:blue', 'tab:orange', 'tab:green', 'tab:purple',
+                     'tab:olive', 'tab:cyan', 'tab:brown', 'tab:pink']))
+    plt.semilogy()
+    plt.gca().yaxis.grid()
+    plt.ylim(0.001, 2)
+    plt.yticks(
+        (1e-3, 1e-2, 1e-1, 0.3, 0.5, 1), 
+        (r"0.1%", r"1%", r"10%", r"30%", r"50%",r"100%"), fontsize=8)
+    plt.xticks([])
+    plt.savefig("nitrogen_fraction_plot_for_poster.png", bbox_inches='tight')
+
     hydrogen_column_density = 3.1e23
     X_abundance_dict = {x: np.array(y)/hydrogen_column_density for x, y in molecule_dict.items()}
 
@@ -207,4 +231,176 @@ def make_charts_for_OrionKL_HotCore():
     plt.savefig("N_Si_plot.png", bbox_inches='tight')
 
     return figure_list
+
+def make_charts_for_Sgr_B2():
+
+    neill_table_6 = astropy.table.Table.read("Neill_table_sin_dots.txt", format='ascii.basic', delimiter='\t', guess=False, data_start=4, header_start=2)    
+    neill_table_7 = astropy.table.Table.read("apj496103t7_ascii_copy.txt", format='ascii.basic', delimiter='\t', guess=False, data_start=4, header_start=2)
+    neill_table_8 = astropy.table.Table.read("apj496103t8_ascii_copy.txt", format='ascii.basic', delimiter='\t', guess=False, data_start=4, header_start=2)
+
+    contains_N_6 = np.array(['N' in item for item in neill_table_6['Molecule']])
+    nitrogen_molecules_table_6 = neill_table_6[contains_N_6]
+    molecule_dict_6 = coldens_range_dict_from_table(nitrogen_molecules_table_6)    
+    try:
+        del molecule_dict_6['NH_2D']
+    except: pass
+    try:
+        del molecule_dict_6['DCN']
+    except: pass
+
+    contains_N_7 = np.array(['N' in item for item in neill_table_7['Molecule']])
+    nitrogen_molecules_table_7 = neill_table_7[contains_N_7]
+    molecule_dict_7 = coldens_range_dict_from_table(nitrogen_molecules_table_7)    
+    try:
+        del molecule_dict_7['NH_2D']
+    except: pass
+    try:
+        del molecule_dict_7['DCN']
+    except: pass
+
+    contains_N_8 = np.array(['N' in item for item in neill_table_8['Molecule']])
+    nitrogen_molecules_table_8 = neill_table_8[contains_N_8]
+    molecule_dict_8 = coldens_range_dict_from_table(nitrogen_molecules_table_8)
+    try:
+        del molecule_dict_8['NH_2D']
+    except: pass
+    try:
+        del molecule_dict_8['DCN']
+    except: pass
+
+
+    figure_list = []
+    figure_list.append(make_errorbar_figure(molecule_dict_6))
+    plt.semilogy()
+    plt.title("Nitrogen accounting in Sgr B2: emission components")
+    plt.savefig("Sgr_B2_emission_coldens.png", bbox_inches='tight')
+
+    figure_list.append(make_errorbar_figure(molecule_dict_7))
+    plt.semilogy()
+    plt.title("Nitrogen accounting in Sgr B2: cold absorption components")
+    plt.savefig("Sgr_B2_coldabs_coldens.png", bbox_inches='tight')
+
+    figure_list.append(make_errorbar_figure(molecule_dict_8))
+    plt.semilogy()
+    plt.title("Nitrogen accounting in Sgr B2: hot absorption components")
+    plt.savefig("Sgr_B2_hotabs_coldens.png", bbox_inches='tight')
+
+
+    return figure_list
+
+
+def transform_zernickel_html_table(html_table):
+    """ The Zernickel table is in a weird format. Let's fix it. """
+
+    new_table = astropy.table.Table()
+
+    colnames = ["Molecule", "theta_s", "T_rot", "N_tot", "Deltav", "v_lsr", "Notes"]
+
+    list_of_left_rows = []
+    list_of_right_rows = []
+
+    for row in html_table:
+
+        left_row = tuple(row.as_void())[:7]
+        right_row = tuple(row.as_void())[7:]
+
+        list_of_left_rows.append(left_row)
+        list_of_right_rows.append(right_row)
+
+    # finally, put right table below left table
+    list_of_rows = list_of_left_rows[:-1] + list_of_right_rows
+
+    transposed_list_of_rows = map(list, zip(*list_of_rows))
+
+    new_table = astropy.table.Table(transposed_list_of_rows, names=colnames)
+
+    # correct for skipped names, and fix molecule names with underscores
+    for i, row in enumerate(new_table):
+
+        # pdb.set_trace()
+        if row['Molecule'] == '0.0':
+            previous_molecule = new_table['Molecule'][i-1]
+            row['Molecule'] = previous_molecule
+        else:
+            for digit in [str(x) for x in range(10)]:
+
+                molecule_name = row['Molecule']
+                new_name = molecule_name.replace(digit, "_"+digit)
+                row['Molecule'] = new_name
+
+    # replace N column table with whatever
+
+    column_density_string_column = new_table['N_tot']
+    column_density_float_list = [float(x.replace(u"\xa0\xd7\xa010", "e")) for x in list(column_density_string_column)]
+    new_column_density_column = astropy.table.Column(column_density_float_list, name="N_tot")
+    new_table.remove_columns(["N_tot"])
+    new_table.add_column(new_column_density_column)
+
+
+
+    return new_table
+
+def make_charts_for_NGC6334I():
+
+    z_table_html = astropy.table.Table.read("zernickel_table3.html", data_start=5)
+    z_table = transform_zernickel_html_table(z_table_html)
+    z_table.remove_columns("Notes")
+
+    contains_N_z = np.array(['N' in item for item in z_table['Molecule']])
+    nitrogen_molecules_table_z = z_table[contains_N_z]
+    molecule_dict_z = coldens_range_dict_from_table(nitrogen_molecules_table_z)    
+
+    try:
+        del molecule_dict_z['NH_2D']
+    except: pass
+    try:
+        del molecule_dict_z['DCN']
+    except: pass
+
+    fig = make_errorbar_figure(molecule_dict_z)
+    plt.semilogy()
+    plt.savefig("NGC6334I_coldens.png", bbox_inches='tight')
+
+    fraction_dict_z = abundance_fraction_dict_v2(molecule_dict_z)
+
+    fig2 = make_errorbar_figure(fraction_dict_z, ylabel="Nitrogen fraction")
+    plt.semilogy()
+    plt.gca().yaxis.grid()
+    plt.ylim(0.001, 2)
+    plt.yticks(
+        (1e-3, 1e-2, 1e-1, 0.3, 0.5, 1), 
+        (r"0.1%", r"1%", r"10%", r"30%", r"50%",r"100%"), fontsize=8)    
+    plt.savefig("NGC6334I_nitrogen_fraction.png", bbox_inches='tight')
+    fig2 = make_errorbar_figure(
+            fraction_dict_z, 
+            ylabel="Nitrogen fraction", figsize=(2.5, 2.5), dpi=400,
+            colors= ['tab:red', 'tab:orange', 'tab:olive', 'tab:blue', 'tab:green', 'tab:orange',
+                     'tab:gray', 'tab:pink', 'tab:blue', 'tab:red'])
+    plt.semilogy()
+    plt.gca().yaxis.grid()
+    plt.ylim(0.001, 2)
+    plt.xlim(-0.5, 10.5)
+    plt.yticks(
+        (1e-3, 1e-2, 1e-1, 0.3, 0.5, 1), 
+        (r"0.1%", r"1%", r"10%", r"30%", r"50%",r"100%"), fontsize=8)
+    plt.xticks([])
+    plt.savefig("NGC6334I_nitrogen_fraction_plot_for_poster.png", bbox_inches='tight')
+
+    # from Ted's notes
+    hydrogen_column_density = 3e24
+    X_abundance_dict_z = {x: np.array(y)/hydrogen_column_density for x, y in molecule_dict_z.items()}
+
+    fig3 = make_errorbar_figure(X_abundance_dict_z, ylabel="Molecular abundance X")
+    plt.semilogy()
+    plt.savefig("NGC6334I_abundance.png", bbox_inches='tight')
+
+    Si_to_H_ratio = 3.16e-05
+    N_to_Si_conversion_constant = 1/2 * 1/Si_to_H_ratio
+    N_Si_ratio_dict_z = {x: y*N_to_Si_conversion_constant for x, y in X_abundance_dict_z.items()}
+
+    fig4 = make_errorbar_figure(N_Si_ratio_dict_z, ylabel="N/Si ratio for each molecule")
+    plt.semilogy()
+    plt.savefig("NGC6334I_N_Si.png", bbox_inches='tight')
+
+    return fig, fig2, fig3, fig4
 
