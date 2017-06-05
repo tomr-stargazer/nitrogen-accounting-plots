@@ -17,7 +17,8 @@ import h13cn_myradex_interface
 # This import will have to change if I refactor correction_factor much.
 from correction_factor.correction_factor_2 import correction_factor_given_radex_table, correction_factor_given_myradex_output
 
-h13cn_J_upper_list = [1, 3, 4, 6, 7, 8, 9, 10]
+# h13cn_J_upper_list = [1, 3, 4, 6, 7, 8, 9, 10]
+h13cn_J_upper_list = [3, 4, 6, 7, 8, 9, 10]
 h13cn_J_lower_list = [x-1 for x in h13cn_J_upper_list]
 
 def h13cn_Tex_vs_density_A(save=True, column=1e16, print_timing=False):
@@ -469,7 +470,8 @@ def h13cn_fc_vs_density_B_myradex(save=True, print_timing=False):
     ax.text(6.75, 1.65, r"$T_k = 50\ \rm{K}$", fontsize=16, family='serif', color='b')
     ax.text(7.5, 1.3, r"$T_k = 100\ \rm{K}$", fontsize=16, family='serif', color='g')
     ax.text(7.75, 1.75, r"$T_k = 200\ \rm{K}$", fontsize=16, family='serif', color='r')
-    ax.text(4.5, 1.2, r"$J_u=1,\ 3,\ 4,\ 6,\ 7,\ 8,\ 9,\ 10$ OBSERVED", fontsize=14, family='serif')
+    string_of_J_uppers = r'\ ,'.join([str(x) for x in h13cn_J_upper_list])
+    ax.text(4.5, 1.2, r"$J_u={0}$ OBSERVED".format(string_of_J_uppers), fontsize=14, family='serif')
 
     ax.set_title("version B.myradex")
     ax.minorticks_on()
@@ -729,7 +731,13 @@ def h13cn_fc_vs_temperature_myradex(save=True, print_timing=False, n_points=20):
     ax.minorticks_on()
 
     if save:
+        ax.set_ylim(1, 4)
         fig.savefig("h13cn_fc_vs_temperature_myradex.pdf")
+        np.savetxt("h13cn_fc_v_T_myr_temperature_array.txt", temperature_array)
+        np.savetxt("h13cn_fc_v_T_myr_fc_array_n6.txt", f_c_array_n6)
+        np.savetxt("h13cn_fc_v_T_myr_fc_array_n7.txt", f_c_array_n7)
+        np.savetxt("h13cn_fc_v_T_myr_fc_array_n8.txt", f_c_array_n8)
+        np.savetxt("h13cn_fc_v_T_myr_fc_array_n9.txt", f_c_array_n9)
 
     plt.show()
 
