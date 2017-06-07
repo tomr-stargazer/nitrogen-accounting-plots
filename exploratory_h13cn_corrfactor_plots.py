@@ -79,7 +79,7 @@ def h13cn_Tex_vs_density_A(save=True, column=1e16, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -139,7 +139,7 @@ def h13cn_Tex_vs_density_A_myradex(save=True, column=1e16, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -202,7 +202,7 @@ def h13cn_Tex_vs_density_B(save=True, column=1e16, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -273,7 +273,7 @@ def h13cn_fc_vs_density_A(save=True, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -342,7 +342,7 @@ def h13cn_fc_vs_density_A_myradex(save=True, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -413,7 +413,7 @@ def h13cn_fc_vs_density_B(save=True, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -483,7 +483,7 @@ def h13cn_fc_vs_density_B_myradex(save=True, print_timing=False):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig
 
@@ -547,16 +547,16 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, n_points=20, column
             # even though the plot's appearance changes when 40 are included.
 
             if np.sum(new_T['lowerlevelpop']) < 0.99:
-                print "unphysical population statistics encountered"
-                print "conditions: T={0}, n={1}".format(temp, density)
-                print "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav)
+                print( "unphysical population statistics encountered")
+                print( "conditions: T={0}, n={1}".format(temp, density))
+                print( "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav))
                 f_c_array_list[j][i] = np.nan
                 print(r"run %debug and explore the variable `new_T` here.")
                 pdb.set_trace()
             elif min(new_T['Tex']) < 0:
-                print "negative Tex encountered"
-                print "conditions: T={0}, n={1}".format(temp, density)
-                print "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav)
+                print( "negative Tex encountered")
+                print( "conditions: T={0}, n={1}".format(temp, density))
+                print( "abundance: {0}, coldens: {1}, deltav={2}".format(abundance, column, deltav))
                 # raise ValueError("intentionally erroring")
                 f_c_array_list[j][i] = f_c
                 pdb.set_trace()
@@ -588,7 +588,7 @@ def h13cn_fc_vs_temperature_A(save=True, print_timing=False, n_points=20, column
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig    
 
@@ -664,7 +664,7 @@ def h13cn_fc_vs_temperature_B(save=True, print_timing=False, n_points=20):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig        
 
@@ -743,6 +743,6 @@ def h13cn_fc_vs_temperature_myradex(save=True, print_timing=False, n_points=20):
 
     end = time.time()
     if print_timing:
-        print end-start
+        print (end-start)
 
     return fig            
