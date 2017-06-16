@@ -67,6 +67,30 @@ def plot_molecular_abundances(table):
     return fig
 
 
+def plot_organic_nitrogen_fraction(table):
+    """ starting basic then adding bells-and-whistles like sorting. """
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    organic_N_table = table[['N' in x and 'C' in x for x in table['Molecule']]]
+    organic_N_table.sort("Hot Core")
+    organic_N_table.reverse()
+
+    total_organic_N = np.nansum(organic_N_table['Hot Core'])
+
+    ax.plot(organic_N_table['Hot Core']/total_organic_N, 'ro')
+    ax.set_xticks(np.arange(len(organic_N_table)))
+    ax.set_xticklabels(organic_N_table['Molecule'], rotation=90)
+
+    ax.set_ylabel("Organic N fraction")
+
+    ax.semilogy()
+    ax.set_ylim(0.005, 1.5)
+    plt.yticks(
+        (1e-2, 3e-2, 1e-1, 0.3, 0.6, 1), 
+        (r"1%", r"3%", r"10%", r"30%", r"60%",r"100%"), fontsize=8)
+
     return fig
 
 
