@@ -62,6 +62,11 @@ def plot_molecular_abundances(table):
     ys = [1e-10, 1e-2]
     ax.plot(xs, ys, 'k--', scaley=False, scalex=False)
 
+    ax.set_ylabel("Abundance (X/H$_2$)")
+
+    return fig
+
+
     return fig
 
 
