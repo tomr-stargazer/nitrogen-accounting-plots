@@ -42,9 +42,13 @@ def plot_molecular_abundances(table):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    ax.plot(table['Hot Core'], 'ro')
-    ax.set_xticks(np.arange(len(table)))
-    ax.set_xticklabels(table['Molecule'], rotation=90)
+    N_table = table[['N' in x for x in table['Molecule']]]
+    N_table.sort("Hot Core")
+    N_table.reverse()
+
+    ax.plot(N_table['Hot Core'], 'ro')
+    ax.set_xticks(np.arange(len(N_table)))
+    ax.set_xticklabels(N_table['Molecule'], rotation=90)
 
     ax.semilogy()
 
