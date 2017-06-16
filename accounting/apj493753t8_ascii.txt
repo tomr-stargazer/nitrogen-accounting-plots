@@ -1,0 +1,51 @@
+Table 8
+Abundances: N_tot(X)/
+
+Molecule	Hot Core	Compact Ridge	Plateau	Extended Ridge	
+XCLASS	
+CH_3CN	3.0 x 10^-8	1.3 x 10^-8	1.0 x 10^-8	 sdotsdotsdot	
+C_2H_3CN	1.1 x 10^-8	 sdotsdotsdot	 sdotsdotsdot	 sdotsdotsdot	
+C_2H_5CN	8.9 x 10^-8	 sdotsdotsdot	 sdotsdotsdot	 sdotsdotsdot	
+HC_3N	8.1 x 10^-9	 sdotsdotsdot	4.6 x 10^-9	 sdotsdotsdot	
+HCN	3.8 x 10^-7	4.1 x 10^-9	2.8 x 10^-7	3.3 x 10^-8	
+HNC	5.5 x 10^-9	1.7 x 10^-10	2.3 x 10^-9	7.6 x 10^-10	
+CN	 sdotsdotsdot	 sdotsdotsdot	2.3 x 10^-9	3.1 x 10^-9	
+HNCO	7.8 x 10^-8	 sdotsdotsdot	1.0 x 10^-8	 sdotsdotsdot	
+NH_2	1.7 x 10^-8	 sdotsdotsdot	 sdotsdotsdot	1.1 x 10^-9	
+HCO^+	6.5 x 10^-10	3.3 x 10^-10	2.4 x 10^-9	2.0 x 10^-9	
+CCH	7.4 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	6.3 x 10^-9	
+CS	1.4 x 10^-7	2.0 x 10^-8	1.6 x 10^-8	1.2 x 10^-8	
+H_2S^a	3.1 x 10^-6	 sdotsdotsdot	3.4 x 10^-7	1.4 x 10^-9	
+H_2CS	1.5 x 10^-8	7.4 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	
+OCS	1.0 x 10^-7	1.1 x 10^-8	4.3 x 10^-8	2.8 x 10^-8	
+SO	1.6 x 10^-7	 sdotsdotsdot	5.2 x 10^-7	1.1 x 10^-8	
+SO_2	3.9 x 10^-7	4.6 x 10^-9	4.9 x 10^-7	4.2 x 10^-9	
+HCS^+	 sdotsdotsdot	4.6 x 10^-10	 sdotsdotsdot	 sdotsdotsdot	
+SiS	 sdotsdotsdot	 sdotsdotsdot	1.5 x 10^-9	 sdotsdotsdot	
+SiO	 sdotsdotsdot	 sdotsdotsdot	1.4 x 10^-8b	 sdotsdotsdot	
+HCl	 sdotsdotsdot	 sdotsdotsdot	5.2 x 10^-9	 sdotsdotsdot	
+NS	6.8 x 10^-9	1.6 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	
+NO	5.5 x 10^-7	8.2 x 10^-8	5.4 x 10^-7	1.1 x 10^-7	
+H_2CO	1.2 x 10^-7	4.4 x 10^-8	1.6 x 10^-8	 sdotsdotsdot	
+H_2CCO	 sdotsdotsdot	5.1 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	
+H_2O^c	6.5 x 10^-4	4.5 x 10^-6	4.8 x 10^-6	 sdotsdotsdot	
+CH_2NH	4.2 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	2.8 x 10^-10	
+NH_2CHO	 sdotsdotsdot	1.9 x 10^-9	 sdotsdotsdot	 sdotsdotsdot	
+C_2H_5OH	 sdotsdotsdot	1.7 x 10^-8	 sdotsdotsdot	 sdotsdotsdot	
+CH_3OCH_3	6.8 x 10^-8	1.7 x 10^-7	 sdotsdotsdot	 sdotsdotsdot	
+CH_3OCHO	 sdotsdotsdot	3.3 x 10^-7	 sdotsdotsdot	 sdotsdotsdot	
+CH_3OH	2.2 x 10^-6	1.2 x 10^-6	 sdotsdotsdot	 sdotsdotsdot	
+CO^d	1.0 x 10^-4	1.0 x 10^-4	1.0 x 10^-4	1.0 x 10^-4	
+MADEX	
+CH_3CN	3.0 x 10^-8	1.2 x 10^-8	1.9 x 10^-8	 sdotsdotsdot	
+SO	1.2 x 10^-7	 sdotsdotsdot	4.6 x 10^-7	3.9 x 10^-9	
+SO_2	6.2 x 10^-7	2.0 x 10^-8	3.6 x 10^-7	3.2 x 10^-9	
+HCN	6.4 x 10^-7	2.3 x 10^-8	2.9 x 10^-7	9.9 x 10^-8	
+HNC	8.7 x 10^-10	5.4 x 10^-10	8.8 x 10^-10	1.0 x 10^-9	
+HCO^+	7.3 x 10^-10	8.7 x 10^-10	8.8 x 10^-10	1.5 x 10^-9	
+
+Notes. We estimate abundance uncertainties derived from both XCLASS and MADEX to be ~40%. See the Appendix for more details concerning error estimates.
+a Hot core abundance taken from Crockett et al. (2014).
+b Abundance computed by averaging the column densities from the low- and high-velocity plateau components (see Section 5.19).
+c All abundances taken from Neill et al. (2013b).
+d Assumed abundance.

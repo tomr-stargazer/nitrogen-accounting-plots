@@ -1,0 +1,51 @@
+Table 8
+Abundances: N_tot(X)/
+
+Molecule	Hot Core	Compact Ridge	Plateau	Extended Ridge	
+XCLASS	
+CH_3CN	3.0e-8	1.3e-8	1.0e-8	 nan	
+C_2H_3CN	1.1e-8	 nan	 nan	 nan	
+C_2H_5CN	8.9e-8	 nan	 nan	 nan	
+HC_3N	8.1e-9	 nan	4.6e-9	 nan	
+HCN	3.8e-7	4.1e-9	2.8e-7	3.3e-8	
+HNC	5.5e-9	1.7e-10	2.3e-9	7.6e-10	
+CN	 nan	 nan	2.3e-9	3.1e-9	
+HNCO	7.8e-8	 nan	1.0e-8	 nan	
+NH_2	1.7e-8	 nan	 nan	1.1e-9	
+HCO^+	6.5e-10	3.3e-10	2.4e-9	2.0e-9	
+CCH	7.4e-9	 nan	 nan	6.3e-9	
+CS	1.4e-7	2.0e-8	1.6e-8	1.2e-8	
+H_2S^a	3.1e-6	 nan	3.4e-7	1.4e-9	
+H_2CS	1.5e-8	7.4e-9	 nan	 nan	
+OCS	1.0e-7	1.1e-8	4.3e-8	2.8e-8	
+SO	1.6e-7	 nan	5.2e-7	1.1e-8	
+SO_2	3.9e-7	4.6e-9	4.9e-7	4.2e-9	
+HCS^+	 nan	4.6e-10	 nan	 nan	
+SiS	 nan	 nan	1.5e-9	 nan	
+SiO	 nan	 nan	1.4e-8b	 nan	
+HCl	 nan	 nan	5.2e-9	 nan	
+NS	6.8e-9	1.6e-9	 nan	 nan	
+NO	5.5e-7	8.2e-8	5.4e-7	1.1e-7	
+H_2CO	1.2e-7	4.4e-8	1.6e-8	 nan	
+H_2CCO	 nan	5.1e-9	 nan	 nan	
+H_2O^c	6.5e-4	4.5e-6	4.8e-6	 nan	
+CH_2NH	4.2e-9	 nan	 nan	2.8e-10	
+NH_2CHO	 nan	1.9e-9	 nan	 nan	
+C_2H_5OH	 nan	1.7e-8	 nan	 nan	
+CH_3OCH_3	6.8e-8	1.7e-7	 nan	 nan	
+CH_3OCHO	 nan	3.3e-7	 nan	 nan	
+CH_3OH	2.2e-6	1.2e-6	 nan	 nan	
+CO^d	1.0e-4	1.0e-4	1.0e-4	1.0e-4	
+MADEX	
+CH_3CN	3.0e-8	1.2e-8	1.9e-8	 nan	
+SO	1.2e-7	 nan	4.6e-7	3.9e-9	
+SO_2	6.2e-7	2.0e-8	3.6e-7	3.2e-9	
+HCN	6.4e-7	2.3e-8	2.9e-7	9.9e-8	
+HNC	8.7e-10	5.4e-10	8.8e-10	1.0e-9	
+HCO^+	7.3e-10	8.7e-10	8.8e-10	1.5e-9	
+
+Notes. We estimate abundance uncertainties derived from both XCLASS and MADEX to be ~40%. See the Appendix for more details concerning error estimates.
+a Hot core abundance taken from Crockett et al. (2014).
+b Abundance computed by averaging the column densities from the low- and high-velocity plateau components (see Section 5.19).
+c All abundances taken from Neill et al. (2013b).
+d Assumed abundance.
