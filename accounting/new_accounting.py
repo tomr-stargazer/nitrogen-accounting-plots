@@ -42,15 +42,25 @@ def plot_molecular_abundances(table):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    N_table = table[['N' in x for x in table['Molecule']]]
-    N_table.sort("Hot Core")
-    N_table.reverse()
+    organic_N_table = table[['N' in x and 'C' in x for x in table['Molecule']]]
+    organic_N_table.sort("Hot Core")
+    organic_N_table.reverse()
+
+    inorganic_N_table = table[['N' in x and 'C' not in x for x in table['Molecule']]]
+    inorganic_N_table.sort("Hot Core")
+    inorganic_N_table.reverse()
+
+    N_table = astropy.table.vstack([organic_N_table, inorganic_N_table])
 
     ax.plot(N_table['Hot Core'], 'ro')
     ax.set_xticks(np.arange(len(N_table)))
     ax.set_xticklabels(N_table['Molecule'], rotation=90)
 
     ax.semilogy()
+
+    xs = len(organic_N_table)-0.5 * np.ones(2)
+    ys = [1e-10, 1e-2]
+    ax.plot(xs, ys, 'k--', scaley=False, scalex=False)
 
     return fig
 
