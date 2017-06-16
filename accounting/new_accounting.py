@@ -37,6 +37,13 @@ def load_table_8_MADEX():
     return table8_madex
 
 
+def load_table_7_Zernickel():
+
+    table7_zernickel = astropy.table.Table.read("zernickel_table7_just_the_table.html", header_start=0, data_start=4)
+
+    return table7_zernickel
+    
+
 def plot_molecular_abundances(table):
     """ starting basic then adding bells-and-whistles like sorting. """
 
