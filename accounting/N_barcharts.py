@@ -76,7 +76,7 @@ def coldens_range_dict_from_table(table):
         adjusted_table.add_row((molecule, combined_N_tot))
 
     ratio_12C_13C = 69
-    ratio_14N_15N = 388
+    ratio_14N_15N = 200
 
     molecule_dict = {}
 
@@ -229,6 +229,11 @@ def make_charts_for_OrionKL_HotCore():
     figure_list.append(make_errorbar_figure(N_Si_ratio_dict, ylabel="N/Si ratio for each molecule"))
     plt.semilogy()
     plt.savefig("N_Si_plot.png", bbox_inches='tight')
+
+    print("HCN/Si range in Orion KL:")
+    print("{0}, {1}, {2}".format(*N_Si_ratio_dict['HCN']))
+    import pdb
+    pdb.set_trace()
 
     return figure_list
 
