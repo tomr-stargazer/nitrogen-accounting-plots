@@ -195,3 +195,43 @@ def get_N_molecules(table):
     molecules_sorted_by_max_value = molecules_unsorted[sorted_indices]
 
 
+def latex_molecule_name(molecule_name):
+    """ Makes the string latex-friendly. """
+    latex_name = r"$\rm{"+molecule_name+"}$"
+    return latex_name
+
+
+def pie_organic_nitrogen_fraction(table, abundance_colname='Hot Core', colors=None):
+    """ starting basic then adding bells-and-whistles like sorting. """
+
+    fig = plt.figure(figsize=(5,5))
+    ax = fig.add_subplot(111)
+
+    organic_N_table = table[['N' in x['Molecule'] and 'C' in x['Molecule'] and ~np.isnan(x[abundance_colname]) for x in table]]
+    organic_N_table.sort(abundance_colname)
+    organic_N_table.reverse()    
+
+    total_organic_N = np.nansum(organic_N_table[abundance_colname])
+
+    # labels = "HCN jk", "CH3CN nope", "something", "yes"
+    # fractions = [0.45, 0.2, 0.2, 0.15]
+
+    fractions = organic_N_table[abundance_colname]/total_organic_N
+    labels = [latex_molecule_name(x) for x in organic_N_table['Molecule']]
+
+    ax.pie(fractions, labels=labels, colors=colors)
+
+    # ax.plot(organic_N_table['Hot Core']/total_organic_N, 'ro')
+    # ax.set_xticks(np.arange(len(organic_N_table)))
+    # ax.set_xticklabels(organic_N_table['Molecule'], rotation=90)
+
+    # ax.set_ylabel("Organic N fraction")
+    # ax.set_xticks([])
+
+    # ax.semilogy()
+    # ax.set_ylim(0.005, 1.5)
+    # plt.yticks(
+    #     (1e-2, 3e-2, 1e-1, 0.3, 0.6, 1), 
+    #     (r"1%", r"3%", r"10%", r"30%", r"60%",r"100%"), fontsize=8)
+
+    return fig
