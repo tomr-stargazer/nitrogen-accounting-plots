@@ -1,6 +1,6 @@
 backend : tkAgg
-text.usetex : False
-# font.serif : Palatino
+text.usetex : True
+font.serif : Palatino
 font.family : serif
 xtick.direction: in
 ytick.direction: in
