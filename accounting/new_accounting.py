@@ -148,12 +148,12 @@ def plot_organic_nitrogen_fraction(table):
 
 orion_KL_colors = ['tab:red', 'tab:purple', 'tab:green', 'tab:olive', 'tab:cyan', 'tab:pink', 'tab:brown', 'tab:orange']
 orion_KL_savename = "new_nitrogen_fraction_plot_for_poster.png"
-orion_KL_ylims = (0.003, 1.5)
-orion_KL_yticks = ((0.003, 1e-2, 3e-2, 1e-1, 0.3, 0.6, 1), 
-                   (r"0.3\%", r"1\%", r"3\%", r"10\%", r"30\%", r"60\%",r"100\%"))
+orion_KL_ylims = (0.0003, 1.5)
+orion_KL_yticks = ((3e-4, 1e-3, 3e-3, 1e-2, 3e-2, 1e-1, 0.3, 0.6, 1), 
+                   (r"0.03\%", r"0.1\%", r"0.3\%", r"1\%", r"3\%", r"10\%", r"30\%", r"60\%",r"100\%"))
 ngc6334_colors = ['tab:red', 'tab:purple', 'tab:olive', 'tab:green', 'tab:pink', 'tab:gray']
 ngc6334_savename = "zern_new_plot.png"
-ngc6334_ylims = (0.003, 1.5)
+ngc6334_ylims = (0.0003, 1.5)
 
 
 def plot_organic_nitrogen_fraction_w_colors_and_errors(
@@ -169,6 +169,7 @@ def plot_organic_nitrogen_fraction_w_colors_and_errors(
     organic_N_table.reverse()
 
     naive_total_organic_N = np.sum(organic_N_table[abundance_colname])
+    print("Total organic N: {0:.3e}".format(naive_total_organic_N))
 
     lx_molnames = [latex_molname_fn(x) for x in organic_N_table['Molecule']]
 
@@ -184,7 +185,8 @@ def plot_organic_nitrogen_fraction_w_colors_and_errors(
         abundance_low = organic_N_table[abundance_colname][i]*0.65
         fraction_low = abundance_low/(total_organic_N_others+abundance_low)
 
-        if organic_N_table['Molecule'][i] == 'HCN':
+        if True: #organic_N_table['Molecule'][i] == 'HCN':
+            print("{0}:".format(organic_N_table['Molecule'][i]))
             print(fraction, fraction_high, fraction_low)
             print(organic_N_table[abundance_colname][i], abundance_high, abundance_low)
 
