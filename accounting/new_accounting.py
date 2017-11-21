@@ -193,8 +193,8 @@ def plot_organic_nitrogen_fraction_w_colors_and_errors(
         ax.errorbar(i, fraction, yerr=np.array([fraction-fraction_low, fraction_high-fraction]).reshape(2,1), 
                     fmt='o', ms=3.5, color=color, ecolor=color, capsize=3, elinewidth=1.5, capthick=1.5, zorder=10)
 
-        t = ax.text(i+0.25, fraction*1.75, lx_molnames[i], bbox={'facecolor':'white', 'edgecolor':'none', 'pad':0.5},
-                    fontdict={'family':'serif', 'weight':'bold', 'color':color, 'rotation':30}, zorder=5)
+        t = ax.text(i+0.25, fraction*1.75/2, lx_molnames[i], bbox={'facecolor':'white', 'edgecolor':'none', 'pad':0.5},
+                    fontdict={'family':'serif', 'weight':'bold', 'color':color, 'rotation':30, 'verticalalignment':'bottom'}, zorder=5)
 
 
     # ax.plot(organic_N_table[abundance_colname]/total_organic_N, 'ro')
